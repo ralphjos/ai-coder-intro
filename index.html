@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Pitfight is a first-person arena duel against one computer opponent. Move with WASD, aim with the mouse, and shoot with left click." />
+  <meta name="theme-color" content="#07090d" />
+  <title>Pitfight</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2307090d'/%3E%3Cpath d='M16 4 L18 14 L28 16 L18 18 L16 28 L14 18 L4 16 L14 14 Z' fill='%2379e7ff'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <canvas id="view" tabindex="-1"></canvas>
+  <div id="vignette"></div>
+  <div id="damage"></div>
+
+  <div id="hud" hidden>
+    <div id="topbar">
+      <div class="identity">
+        <span class="name rival">Rival</span>
+        <span id="rival-hp-num">100</span>
+      </div>
+      <div class="track"><div id="rival-fill"></div></div>
+    </div>
+
+    <div id="crosshair" hidden>
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div id="hitmarker" hidden><i></i><i></i><i></i><i></i></div>
+    <div id="ready" hidden><i id="ready-fill"></i></div>
+
+    <div id="bottombar">
+      <div class="identity">
+        <span class="name">You</span>
+        <span id="player-hp-num">100</span>
+      </div>
+      <div class="track you" id="player-track"><div id="player-fill"></div></div>
+      <p class="weapon">Lancer</p>
+    </div>
+
+    <p id="hint">WASD move and strafe<br />Mouse aim<br />Left click shoot<br />Esc release mouse</p>
+  </div>
+
+  <div id="announce" hidden>FIGHT</div>
+
+  <div id="overlay">
+    <section class="panel" id="menu-panel">
+      <p class="kicker"><i></i> Single combat</p>
+      <h1>PITFIGHT</h1>
+      <p class="lede">A first-person duel in a closed arena. One computer opponent. Break line of sight, hold your lane, and drop the rival before they drop you.</p>
+      <ul class="controls">
+        <li><span class="keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span> Move and strafe</li>
+        <li><span class="keys"><kbd>Mouse</kbd></span> Aim</li>
+        <li><span class="keys"><kbd>Left click</kbd></span> Shoot</li>
+        <li><span class="keys"><kbd>Esc</kbd></span> Release the mouse</li>
+      </ul>
+      <button id="start-btn" type="button">Enter the pit</button>
+      <p id="coarse-note" class="note" hidden>This match is played with a keyboard and mouse.</p>
+    </section>
+
+    <section class="panel" id="pause-panel" hidden>
+      <p class="kicker"><i></i> Hold</p>
+      <h2>Paused</h2>
+      <p class="lede">The rival is waiting. Click anywhere to aim again.</p>
+      <ul class="controls">
+        <li><span class="keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span> Move and strafe</li>
+        <li><span class="keys"><kbd>Mouse</kbd></span> Aim</li>
+        <li><span class="keys"><kbd>Left click</kbd></span> Shoot</li>
+      </ul>
+      <button id="resume-btn" type="button">Resume</button>
+    </section>
+
+    <section class="panel" id="end-panel" hidden>
+      <p class="kicker"><i></i> Result</p>
+      <h2 id="end-title">Rival down</h2>
+      <p class="lede" id="end-copy">The pit is yours.</p>
+      <p id="end-stats"></p>
+      <button id="again-btn" type="button">Fight again</button>
+    </section>
+
+    <p id="lock-msg" hidden></p>
+  </div>
+
+  <button id="mute" type="button" aria-pressed="false">Sound on</button>
+  <p id="boot-error" hidden>The arena failed to load. Reload the page and try again.</p>
+  <p id="status" class="sr-only" role="status"></p>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three.module.js"
+    }
+  }
+  </script>
+  <script type="module" src="js/game.js?v=2"></script>
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        if (!window.__PITFIGHT__) {
+          const el = document.getElementById('boot-error');
+          el.hidden = false;
+        }
+      }, 3000);
+    });
+  </script>
+</body>
+</html>
